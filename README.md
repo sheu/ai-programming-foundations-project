@@ -56,3 +56,6 @@ Then open:
 `data_analysis_workflow.ipynb`
 
 Run the notebook cells from top to bottom.
+
+### Bias awareness
+The clearest risk in this notebook is the handling of missing ages: filling missing `Age` values with `-1` preserves a numeric column but introduces an artificial value that lowers the mean age and can distort correlations, distributions, and any downstream interpretation of passenger age. 
