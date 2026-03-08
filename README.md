@@ -1,30 +1,58 @@
 # ai-programming-foundations-project
 
-AI - Udacity capstone project. Introduction to AI programming with Python.
+# Data Analysis Workflow Project
 
-## Python version
+## Project Description
+This project demonstrates a complete and reproducible data analysis workflow using Python and Jupyter Notebook. It includes loading a real dataset, cleaning and transforming the data, performing exploratory data analysis, and summarizing findings in a structured way. The project is designed as a foundation for future machine learning and AI workflows.
 
-This project is set up with **Python 3.14.0**.
+## What I Built
+I built a reproducible data workflow in `data_analysis_workflow.ipynb` that:
+- loads the dataset
+- cleans and transforms the data
+- performs exploratory data analysis
+- generates summary statistics, grouped views, and correlation checks
+- documents findings clearly in notebook format
 
-## Create a virtual environment
+## Dataset Used
+- **Dataset Name:** Titanic - Machine Learning from Disaster
+- **Source:** [Kaggle Titanic Dataset](https://www.kaggle.com/competitions/titanic/data)
 
-From the project root, run:
+## How to Run the Project
 
+### 1. Clone the repository
 ```bash
-python3.14 -m venv .venv
+git clone <your-repository-url>
+cd <your-repository-folder>
 ```
-
-Activate the environment:
-
-```bash
+### 2. Create and activate a virtual environment
+#### macOS / Linux
+```bash 
+python3 -m venv .venv
 source .venv/bin/activate
 ```
-
-## Install dependencies
-
-With the virtual environment activated, install dependencies from `requirements.txt`:
-
+#### Windows
+```bash 
+python -m venv .venv
+.venv\Scripts\activate
+```
+### 3. Install dependencies
 ```bash
-python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
+To save the dependencies you used to run the project
+```bash
+pip freeze > requirements.txt
+```
+### 4. Open and run the notebook
+
+#### Start Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+Then open:
+
+`data_analysis_workflow.ipynb`
+
+Run the notebook cells from top to bottom.
