@@ -1,48 +1,51 @@
 # AI Programming Foundations Project
 
-A capstone project for Udacity's **AI Programming with Python Nanodegree**. This project applies core AI and deep-learning concepts—Python, NumPy, pandas, Matplotlib, linear algebra, and PyTorch—to build and deploy an image classifier that identifies flower species.
+A project for Udacity's **AI Programming with Python Nanodegree**.  
+This repository demonstrates a complete, **reproducible data workflow** using Python's core  
+data-science stack — no machine-learning models yet.  It builds the foundation that later  
+ML, Deep Learning, Generative AI, and Agentic AI projects will build upon.
 
 ---
 
 ## Table of Contents
 
 - [Project Overview](#project-overview)
-- [Nanodegree Curriculum](#nanodegree-curriculum)
+- [Workflow Steps](#workflow-steps)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Usage](#usage)
-  - [Training](#training)
-  - [Prediction](#prediction)
+- [Running the Notebook](#running-the-notebook)
 - [Technologies Used](#technologies-used)
+- [References](#references)
 - [License](#license)
 
 ---
 
 ## Project Overview
 
-The capstone project trains a deep neural network on the [102 Category Flower Dataset](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html) using transfer learning with a pre-trained model (e.g., VGG, ResNet, or DenseNet from `torchvision`). The trained model is then used as a command-line application to predict the name of a flower from an input image.
+`data_workflow.ipynb` loads a synthetically generated dataset of **urban quality-of-life  
+indicators** for 20 cities across four geographic regions over six years (2018–2023), then  
+cleans, transforms, explores, and visualizes it in a reproducible notebook.
 
-Key goals:
-- Load and pre-process image data for training, validation, and testing.
-- Fine-tune a pre-trained convolutional neural network.
-- Save and load model checkpoints.
-- Perform inference on new images with top-K class probabilities.
+The synthetic dataset was chosen so the project runs end-to-end without any external  
+downloads, making it trivially reproducible on any machine — a practice recommended by  
+Wilson et al. (2017).
 
 ---
 
-## Nanodegree Curriculum
+## Workflow Steps
 
-The project draws on the following modules from the nanodegree:
-
-| Module | Topics |
+| Step | Description |
 |---|---|
-| **Introduction to Python** | Data types, control flow, functions, OOP |
-| **NumPy & pandas** | Array operations, DataFrames, data wrangling |
-| **Matplotlib** | Data visualization, plotting training curves |
-| **Linear Algebra** | Vectors, matrices, transformations |
-| **Neural Networks** | Perceptrons, activation functions, backpropagation |
-| **Deep Learning with PyTorch** | CNNs, transfer learning, model checkpointing |
+| **1 — Setup** | Import libraries; fix `RANDOM_SEED = 42` for full reproducibility |
+| **2 — Data generation** | Create a 120-row dataset (20 cities × 6 years) with NumPy |
+| **3 — Data inspection** | `.info()`, `.describe()`, dtype audit |
+| **4 — Data cleaning** | Cap AQI outlier; regional-median imputation; correct dtypes |
+| **5 — Feature engineering** | Composite `wellbeing_score`; ordinal `income_bracket` |
+| **6 — EDA** | Summary statistics; Pearson correlation matrix |
+| **7 — Visualization** | Distributions, boxplots, heatmap, scatter + OLS trend, time series |
+| **8 — Key findings** | Narrative summary of five major insights |
+| **9 — References** | Two scholarly sources + Jupyter citation |
 
 ---
 
@@ -50,12 +53,8 @@ The project draws on the following modules from the nanodegree:
 
 ```
 ai-programming-foundations-project/
-├── Image Classifier Project.ipynb   # Jupyter notebook for development
-├── train.py                         # Script to train the network
-├── predict.py                       # Script to run inference on an image
-├── model.py                         # Model architecture and helper functions
-├── utils.py                         # Data loading and image processing utilities
-├── cat_to_name.json                 # Mapping of category labels to flower names
+├── data_workflow.ipynb   # Main notebook (load → clean → explore → visualize → communicate)
+├── requirements.txt      # Python dependencies
 └── README.md
 ```
 
@@ -63,9 +62,7 @@ ai-programming-foundations-project/
 
 ## Prerequisites
 
-- Python 3.7+
-- [PyTorch](https://pytorch.org/) 1.0+ with torchvision
-- CUDA-capable GPU (recommended for training)
+- Python 3.9+  (uses `numpy.random.default_rng`, available since Python 3.9 / NumPy 1.17)
 
 ---
 
@@ -78,7 +75,7 @@ ai-programming-foundations-project/
    cd ai-programming-foundations-project
    ```
 
-2. **Create and activate a virtual environment** (optional but recommended)
+2. **Create and activate a virtual environment** (recommended)
 
    ```bash
    python -m venv venv
@@ -88,77 +85,55 @@ ai-programming-foundations-project/
 3. **Install dependencies**
 
    ```bash
-   pip install torch torchvision numpy pandas matplotlib pillow
+   pip install -r requirements.txt
    ```
-
-4. **Download the dataset**
-
-   Download the [102 Category Flower Dataset](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html) and organize it into `train/`, `valid/`, and `test/` subdirectories under a `flowers/` folder.
 
 ---
 
-## Usage
-
-### Training
-
-Train a new model from scratch or fine-tune a pre-trained network:
+## Running the Notebook
 
 ```bash
-python train.py flowers/ \
-    --arch vgg16 \
-    --learning_rate 0.001 \
-    --hidden_units 512 \
-    --epochs 10 \
-    --gpu
+jupyter notebook data_workflow.ipynb
 ```
 
-**Arguments**
-
-| Argument | Default | Description |
-|---|---|---|
-| `data_dir` | (required) | Path to dataset directory |
-| `--save_dir` | `.` | Directory to save the checkpoint |
-| `--arch` | `vgg16` | Pre-trained model architecture |
-| `--learning_rate` | `0.001` | Optimizer learning rate |
-| `--hidden_units` | `512` | Units in the hidden layer |
-| `--epochs` | `20` | Number of training epochs |
-| `--gpu` | `False` | Use GPU for training |
-
-### Prediction
-
-Predict the flower category of a single image:
+or, to execute non-interactively and verify reproducibility:
 
 ```bash
-python predict.py /path/to/image checkpoint.pth \
-    --top_k 5 \
-    --category_names cat_to_name.json \
-    --gpu
+jupyter nbconvert --to notebook --execute --inplace data_workflow.ipynb
 ```
 
-**Arguments**
-
-| Argument | Default | Description |
-|---|---|---|
-| `input` | (required) | Path to input image |
-| `checkpoint` | (required) | Path to saved model checkpoint |
-| `--top_k` | `1` | Return top K most-likely classes |
-| `--category_names` | `cat_to_name.json` | JSON file mapping categories to names |
-| `--gpu` | `False` | Use GPU for inference |
+Every cell output is deterministic because all random operations use `RANDOM_SEED = 42`.
 
 ---
 
 ## Technologies Used
 
-- **Python 3** – core programming language
-- **PyTorch & torchvision** – deep learning framework and pre-trained models
-- **NumPy** – numerical computing
-- **pandas** – data manipulation
-- **Matplotlib** – visualization
-- **Pillow (PIL)** – image loading and transformation
-- **Jupyter Notebook** – interactive development environment
+| Tool | Purpose |
+|---|---|
+| **Python 3** | Core language |
+| **NumPy** | Synthetic data generation; numerical operations |
+| **pandas** | DataFrame manipulation, cleaning, groupby EDA |
+| **Matplotlib** | Base charting and axis formatting |
+| **Seaborn** | Statistical visualizations (histplot, boxplot, heatmap) |
+| **Jupyter Notebook** | Literate-programming environment |
+| **Git & GitHub** | Version control and collaboration |
+
+---
+
+## References
+
+1. Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., & Teal, T. K. (2017).
+   Good enough practices in scientific computing.
+   *PLOS Computational Biology*, 13(6), e1005510.
+   <https://doi.org/10.1371/journal.pcbi.1005510>
+
+2. Wickham, H. (2014). Tidy data.
+   *Journal of Statistical Software*, 59(10), 1–23.
+   <https://doi.org/10.18637/jss.v059.i10>
 
 ---
 
 ## License
 
-This project is submitted as part of the Udacity AI Programming with Python Nanodegree. Code and assets follow the [Udacity Honor Code](https://udacity.com/legal/community-guidelines).
+This project is submitted as part of the Udacity AI Programming with Python Nanodegree.  
+Code and assets follow the [Udacity Honor Code](https://udacity.com/legal/community-guidelines).
